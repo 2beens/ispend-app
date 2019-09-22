@@ -107,7 +107,7 @@ class SignInWidget extends StatelessWidget {
               ),
               color: Colors.blueGrey,
               onPressed: () =>
-                  Controller.tryToLogIn(
+                  Controller.trySignIn(
                       this.context, usernameController, passwordController),
             ),
           ),

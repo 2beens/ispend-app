@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ispend_app/models/user.dart';
 
 class Profile extends StatelessWidget {
-  final User user;
+  User user;
 
   Profile({this.user});
 
@@ -27,8 +27,9 @@ class Profile extends StatelessWidget {
               child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Name: " + user.username),
-                  Text("Email: " + user.email),
+                  Text("Email: " + this.user.email),
+                  Text("Username: " + this.user.username),
+                  Text("Cookie: " + this.user.cookie),
                 ],
               )
               //child: _displayUserData(user.profileData),

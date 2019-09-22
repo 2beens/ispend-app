@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ispend_app/models/user.dart';
+import 'package:ispend_app/network/apiResponse.dart';
 import 'package:ispend_app/network/networkManager.dart';
 import 'package:ispend_app/screens/Profile.dart';
 import 'package:ispend_app/widgets/signInWidget.dart';
@@ -11,6 +14,8 @@ import 'darkTheme.dart';
 
 bool _signUpActive = false;
 bool _signInActive = true;
+
+User _loggedUser;
 
 class MyApp extends StatelessWidget {
   MyApp({Key key}) : super(key: key);
@@ -229,7 +234,7 @@ class Controller extends ControllerMVC {
 
   static String get displaySignUpButtonTest => "SIGN UP";
 
-  static String get displaySignInEmailButton => "Sign in with Email";
+  static String get displaySignInEmailButton => "SIGN IN";
 
   static String get displayErrorEmailLogIn =>
       "Email or Password was incorrect. Please try again";
@@ -238,17 +243,38 @@ class Controller extends ControllerMVC {
 
   static void changeToSignIn() => Model._changeToSignIn();
 
-  static Future<bool> signIn(context, username, password) =>
+  static Future<APIResponse> signIn(context, username, password) =>
       Model._signIn(context, username, password);
 
   static void signUp(email, username, password) =>
       Model._signUp(email, username, password);
 
-  static Future navigateToProfile(context) => Model._navigateToProfile(context);
+  static Future navigateToProfile(context, User loggedUser) =>
+      Model._navigateToProfile(context, loggedUser);
 
-  static Future tryToLogIn(context, username, password) async {
-    if (await signIn(context, username, password) == true) {
-      navigateToProfile(context);
+  static Future trySignIn(
+      context,
+      TextEditingController usernameCtrl,
+      TextEditingController passwordCtrl) async {
+    APIResponse apiResp = await signIn(context, usernameCtrl, passwordCtrl);
+    if (apiResp.isError) {
+      Fluttertoast.showToast(
+          msg: apiResp.message,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIos: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      _loggedUser = null;
+    } else {
+      _loggedUser = new User(
+          email: "<email>",
+          username: usernameCtrl.text.trim(),
+          password: passwordCtrl.text,
+          cookie: apiResp.data);
+      print("logged user: " + _loggedUser.toString());
+      navigateToProfile(context, _loggedUser);
     }
   }
 
@@ -274,26 +300,25 @@ class Model {
     _signInActive = true;
   }
 
-  static Future<bool> _signIn(context, TextEditingController usernameCtrl,
+  static Future<APIResponse> _signIn(
+      context,
+      TextEditingController usernameCtrl,
       TextEditingController passwordCtrl) async {
     try {
-      // AuthResult result = await FirebaseAuth.instance
-      //     .signInWithEmailAndPassword(
-      //     email: email.text.trim().toLowerCase(), password: password.text);
-      // print('Signed in: ${result.user.uid}');
-      // NetworkManager.sendLogin('serj', 'serj1');
       String username = usernameCtrl.text.trim();
       String password = passwordCtrl.text;
-      print("received for signIn: [$username][$password]");
-      return false;
+      print("try to log in: [$username][$password]");
+      return NetworkManager.sendLogin(username, password);
     } catch (e) {
       print('Error: $e');
-      return false;
+      return null;
     }
   }
 
-  static Future<bool> _signUp(TextEditingController emailCtrl,
-      TextEditingController usernameCtrl, TextEditingController passwordCtrl) async {
+  static Future<bool> _signUp(
+      TextEditingController emailCtrl,
+      TextEditingController usernameCtrl,
+      TextEditingController passwordCtrl) async {
     try {
       // AuthResult result = await FirebaseAuth.instance
       //     .createUserWithEmailAndPassword(
@@ -310,8 +335,8 @@ class Model {
     }
   }
 
-  static Future _navigateToProfile(context) async {
-    await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Profile()));
+  static Future _navigateToProfile(context, User loggedUser) async {
+    await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => Profile(user: loggedUser)));
   }
 }
