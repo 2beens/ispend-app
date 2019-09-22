@@ -159,7 +159,7 @@ class _LogInPageState extends StateMVC<LogInPage> {
       TextEditingController usernameController,
       TextEditingController passwordController) {
     return new SignInWidget(
-        context: context,
+        mainContext: context,
         usernameController: usernameController,
         passwordController: passwordController);
   }
@@ -169,6 +169,7 @@ class _LogInPageState extends StateMVC<LogInPage> {
       TextEditingController newUsernameController,
       TextEditingController newPasswordController) {
     return new SignupWidget(
+        mainContext: context,
         newEmailController: newEmailController,
         newUsernameController: newUsernameController,
         newPasswordController: newPasswordController);
@@ -246,15 +247,10 @@ class Controller extends ControllerMVC {
   static Future<APIResponse> signIn(context, username, password) =>
       Model._signIn(context, username, password);
 
-  static void signUp(email, username, password) =>
+  static Future<APIResponse> signUp(email, username, password) =>
       Model._signUp(email, username, password);
 
-  static Future navigateToProfile(context, User loggedUser) =>
-      Model._navigateToProfile(context, loggedUser);
-
-  static Future trySignIn(
-      context,
-      TextEditingController usernameCtrl,
+  static Future trySignIn(context, TextEditingController usernameCtrl,
       TextEditingController passwordCtrl) async {
     APIResponse apiResp = await signIn(context, usernameCtrl, passwordCtrl);
     if (apiResp.isError) {
@@ -277,6 +273,52 @@ class Controller extends ControllerMVC {
       navigateToProfile(context, _loggedUser);
     }
   }
+
+  static Future trySignUp(
+      context,
+      TextEditingController emailCtrl,
+      TextEditingController usernameCtrl,
+      TextEditingController passwordCtrl) async {
+    APIResponse apiResp = await signUp(emailCtrl, usernameCtrl, passwordCtrl);
+    if (apiResp.isError) {
+      Fluttertoast.showToast(
+          msg: apiResp.message,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIos: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      _loggedUser = null;
+    } else {
+      await NetworkManager.sendLogin(
+              usernameCtrl.text.trim(), passwordCtrl.text)
+          .then((apiResp) {
+        if (apiResp.isError) {
+          Fluttertoast.showToast(
+            msg: apiResp.message,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 5,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        _loggedUser = null;
+        } else {
+          _loggedUser = new User(
+              email: emailCtrl.text.trim().toLowerCase(),
+              username: usernameCtrl.text.trim(),
+              password: passwordCtrl.text,
+              cookie: apiResp.data);
+          print("logging in registered user: " + _loggedUser.cookie);
+          navigateToProfile(context, _loggedUser);
+        }
+      });
+    }
+  }
+
+  static Future navigateToProfile(context, User loggedUser) =>
+      Model._navigateToProfile(context, loggedUser);
 
   static Future tryToSignUpWithEmail(email, password) async {
     if (await tryToSignUpWithEmail(email, password) == true) {
@@ -315,23 +357,19 @@ class Model {
     }
   }
 
-  static Future<bool> _signUp(
+  static Future<APIResponse> _signUp(
       TextEditingController emailCtrl,
       TextEditingController usernameCtrl,
       TextEditingController passwordCtrl) async {
     try {
-      // AuthResult result = await FirebaseAuth.instance
-      //     .createUserWithEmailAndPassword(
-      //     email: email.text.trim().toLowerCase(), password: password.text);
-      // print('Signed up: ${result.user.uid}');
       String email = emailCtrl.text.trim().toLowerCase();
       String username = usernameCtrl.text.trim();
       String password = passwordCtrl.text;
       print("received for signUp: [$email][$username][$password]");
-      return true;
+      return NetworkManager.sendRegister(email, username, password);
     } catch (e) {
       print('Error: $e');
-      return false;
+      return null;
     }
   }
 

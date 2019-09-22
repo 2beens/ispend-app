@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ispend_app/config.dart';
 import 'package:ispend_app/models/user.dart';
 
 class Profile extends StatelessWidget {
@@ -24,22 +25,22 @@ class Profile extends StatelessWidget {
         ),
         body: Container(
           child: Center(
-              child: Column(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Email: " + this.user.email),
-                  Text("Username: " + this.user.username),
-                  Text("Cookie: " + this.user.cookie),
-                ],
-              )
-              //child: _displayUserData(user.profileData),
+              children: <Widget>[
+                Text("Email: " + this.user.email),
+                Text("Username: " + this.user.username),
+                Text("Cookie: " + this.user.cookie),
+                _displayUserData(this.user),
+              ],
             ),
+          ),
         ),
       ),
     );
   }
 
-  /** _displayUserData(profileData) {
+  _displayUserData(User user) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -50,22 +51,21 @@ class Profile extends StatelessWidget {
             shape: BoxShape.circle,
             image: DecorationImage(
               fit: BoxFit.fill,
-               image: NetworkImage(
-                profileData['picture']['data']['url'],
+              image: NetworkImage(
+                Config.defaultUserPhotoUrl,
+                // user['picture']['data']['url'],
               ),
-              
             ),
           ),
         ),
         SizedBox(height: 28.0),
         Text(
-          "Logged in as: ${profileData['name']}",
+          "Logged in as: ${user.username}",
           style: TextStyle(
             fontSize: 20.0,
           ),
         ),
       ],
     );
-}*/
-
+  }
 }

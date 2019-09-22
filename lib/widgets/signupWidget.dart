@@ -9,8 +9,9 @@ class SignupWidget extends StatelessWidget {
   final TextEditingController newEmailController;
   final TextEditingController newUsernameController;
   final TextEditingController newPasswordController;
+  final BuildContext mainContext;
 
-  SignupWidget({this.newEmailController, this.newUsernameController, this.newPasswordController});
+  SignupWidget({this.mainContext, this.newEmailController, this.newUsernameController, this.newPasswordController});
 
   @override
   Widget build(BuildContext context) {
@@ -123,8 +124,8 @@ class SignupWidget extends StatelessWidget {
               ),
               color: Colors.blueGrey,
               onPressed: () =>
-                  Controller.signUp(
-                      newEmailController, newUsernameController, newPasswordController),
+                  Controller.trySignUp(
+                      this.mainContext, newEmailController, newUsernameController, newPasswordController),
             ),
           ),
         ),

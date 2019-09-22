@@ -10,9 +10,9 @@ import 'darkTheme.dart';
 class SignInWidget extends StatelessWidget {
   final TextEditingController usernameController;
   final TextEditingController passwordController;
-  final BuildContext context;
+  final BuildContext mainContext;
 
-  SignInWidget({this.context, this.usernameController, this.passwordController});
+  SignInWidget({this.mainContext, this.usernameController, this.passwordController});
 
   @override
   Widget build(BuildContext context) {
@@ -27,21 +27,21 @@ class SignInWidget extends StatelessWidget {
             padding: EdgeInsets.only(),
             child: TextField(
               style: TextStyle(color: Theme
-                  .of(this.context)
+                  .of(this.mainContext)
                   .accentColor),
               controller: usernameController,
               decoration: InputDecoration(
                 hintText: Controller.displayHintTextEmail,
-                hintStyle: CustomTextStyle.formField(this.context),
+                hintStyle: CustomTextStyle.formField(this.mainContext),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                         color: Theme
-                            .of(this.context)
+                            .of(this.mainContext)
                             .accentColor, width: 1.0)),
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                         color: Theme
-                            .of(this.context)
+                            .of(this.mainContext)
                             .accentColor, width: 1.0)),
                 prefixIcon: const Icon(
                   Icons.email,
@@ -61,22 +61,22 @@ class SignInWidget extends StatelessWidget {
             child: TextField(
               obscureText: true,
               style: TextStyle(color: Theme
-                  .of(this.context)
+                  .of(this.mainContext)
                   .accentColor),
               controller: passwordController,
               decoration: InputDecoration(
                 //Add th Hint text here.
                 hintText: Controller.displayHintTextPassword,
-                hintStyle: CustomTextStyle.formField(this.context),
+                hintStyle: CustomTextStyle.formField(this.mainContext),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                         color: Theme
-                            .of(this.context)
+                            .of(this.mainContext)
                             .accentColor, width: 1.0)),
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                         color: Theme
-                            .of(this.context)
+                            .of(this.mainContext)
                             .accentColor, width: 1.0)),
                 prefixIcon: const Icon(
                   Icons.lock,
@@ -100,7 +100,7 @@ class SignInWidget extends StatelessWidget {
                     child: Text(
                       Controller.displaySignInEmailButton,
                       textAlign: TextAlign.center,
-                      style: CustomTextStyle.button(this.context),
+                      style: CustomTextStyle.button(this.mainContext),
                     ),
                   )
                 ],
@@ -108,7 +108,7 @@ class SignInWidget extends StatelessWidget {
               color: Colors.blueGrey,
               onPressed: () =>
                   Controller.trySignIn(
-                      this.context, usernameController, passwordController),
+                      this.mainContext, usernameController, passwordController),
             ),
           ),
         ),
