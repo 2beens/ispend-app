@@ -7,9 +7,10 @@ import 'darkTheme.dart';
 
 class SignupWidget extends StatelessWidget {
   final TextEditingController newEmailController;
+  final TextEditingController newUsernameController;
   final TextEditingController newPasswordController;
 
-  SignupWidget({this.newEmailController, this.newPasswordController});
+  SignupWidget({this.newEmailController, this.newUsernameController, this.newPasswordController});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class SignupWidget extends StatelessWidget {
             child: TextField(
               obscureText: false,
               style: CustomTextStyle.formField(context),
-              controller: null, // TODO:
+              controller: newUsernameController,
               decoration: InputDecoration(
                 //Add th Hint text here.
                 hintText: Controller.displayHintTextNewUsername,
@@ -122,8 +123,8 @@ class SignupWidget extends StatelessWidget {
               ),
               color: Colors.blueGrey,
               onPressed: () =>
-                  Controller.signUpWithEmailAndPassword(
-                      newEmailController, newPasswordController),
+                  Controller.signUp(
+                      newEmailController, newUsernameController, newPasswordController),
             ),
           ),
         ),

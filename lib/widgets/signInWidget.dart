@@ -8,11 +8,11 @@ import 'package:ispend_app/widgets/socialIcons.dart';
 import 'darkTheme.dart';
 
 class SignInWidget extends StatelessWidget {
-  final TextEditingController emailController;
+  final TextEditingController usernameController;
   final TextEditingController passwordController;
   final BuildContext context;
 
-  SignInWidget({this.context, this.emailController, this.passwordController});
+  SignInWidget({this.context, this.usernameController, this.passwordController});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class SignInWidget extends StatelessWidget {
               style: TextStyle(color: Theme
                   .of(this.context)
                   .accentColor),
-              controller: emailController,
+              controller: usernameController,
               decoration: InputDecoration(
                 hintText: Controller.displayHintTextEmail,
                 hintStyle: CustomTextStyle.formField(this.context),
@@ -107,8 +107,8 @@ class SignInWidget extends StatelessWidget {
               ),
               color: Colors.blueGrey,
               onPressed: () =>
-                  Controller.tryToLogInUserViaEmail(
-                      this.context, emailController, passwordController),
+                  Controller.tryToLogIn(
+                      this.context, usernameController, passwordController),
             ),
           ),
         ),

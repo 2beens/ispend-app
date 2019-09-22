@@ -11,25 +11,6 @@ import 'darkTheme.dart';
 
 bool _signUpActive = false;
 bool _signInActive = true;
-TextEditingController _emailController = TextEditingController();
-TextEditingController _passwordController = TextEditingController();
-TextEditingController _newEmailController = TextEditingController();
-TextEditingController _newPasswordController = TextEditingController();
-
-const String _logoTitle = "iSpend";
-const String _logoSubTitle = "Where the f is ma' monah'??";
-const String _signInMenuButton = "SIGN IN";
-const String _signUpMenuButton = "SIGN UP";
-const String _hintTextEmail = "Email";
-const String _hintTextUsername = "Username";
-const String _hintTextPassword = "Password";
-const String _hintTextNewUsername = "Enter your Username";
-const String _hintTextNewEmail = "Enter your Email";
-const String _hintTextNewPassword = "Enter a Password";
-const String _signUpButtonText = "SIGN UP";
-const String _signInWithEmailButtonText = "Sign in with Email";
-const String _emailLogInFailed =
-    "Email or Password was incorrect. Please try again";
 
 class MyApp extends StatelessWidget {
   MyApp({Key key}) : super(key: key);
@@ -40,33 +21,33 @@ class MyApp extends StatelessWidget {
         home: Scaffold(
           resizeToAvoidBottomPadding: true,
           body: new Builder(
-              builder: (context) =>
-              new Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Theme
-                              .of(context)
-                              .primaryColor,
-                          Theme
-                              .of(context)
-                              .primaryColorLight
+              builder: (context) => new Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                          Theme.of(context).primaryColor,
+                          Theme.of(context).primaryColorLight
                         ])),
-                child: Padding(
-                  padding: EdgeInsets.only(top: 40.0),
-                  //Sets the main padding all widgets has to adhere to.
-                  child: LogInPage(),
-                ),
-              )
-          ),
-        )
-    );
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 40.0),
+                      //Sets the main padding all widgets has to adhere to.
+                      child: LogInPage(),
+                    ),
+                  )),
+        ));
   }
 }
 
 class _LogInPageState extends StateMVC<LogInPage> {
+  // TextEditingController _emailController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _newEmailController = TextEditingController();
+  TextEditingController _newUsernameController = TextEditingController();
+  TextEditingController _newPasswordController = TextEditingController();
+
   _LogInPageState() : super(Controller());
 
   @override
@@ -75,11 +56,10 @@ class _LogInPageState extends StateMVC<LogInPage> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    ScreenUtil.instance = ScreenUtil.getInstance()
-      ..init(context);
+    ScreenUtil.instance = ScreenUtil.getInstance()..init(context);
     ScreenUtil.instance =
-    ScreenUtil(width: 750, height: 1304, allowFontScaling: true)
-      ..init(context);
+        ScreenUtil(width: 750, height: 1304, allowFontScaling: true)
+          ..init(context);
     return Column(
       children: <Widget>[
         Container(
@@ -88,10 +68,8 @@ class _LogInPageState extends StateMVC<LogInPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                      Controller.displayLogoTitle,
-                      style: CustomTextStyle.title(context)
-                  ),
+                  Text(Controller.displayLogoTitle,
+                      style: CustomTextStyle.title(context)),
                   Text(
                     Controller.displayLogoSubTitle,
                     style: CustomTextStyle.subTitle(context),
@@ -121,17 +99,13 @@ class _LogInPageState extends StateMVC<LogInPage> {
                     child: new Text(Controller.displaySignInMenuButton,
                         style: _signInActive
                             ? TextStyle(
-                            fontSize: 22,
-                            color: Theme
-                                .of(context)
-                                .accentColor,
-                            fontWeight: FontWeight.bold)
+                                fontSize: 22,
+                                color: Theme.of(context).accentColor,
+                                fontWeight: FontWeight.bold)
                             : TextStyle(
-                            fontSize: 16,
-                            color: Theme
-                                .of(context)
-                                .accentColor,
-                            fontWeight: FontWeight.normal)),
+                                fontSize: 16,
+                                color: Theme.of(context).accentColor,
+                                fontWeight: FontWeight.normal)),
                   ),
                   OutlineButton(
                     onPressed: () =>
@@ -142,17 +116,13 @@ class _LogInPageState extends StateMVC<LogInPage> {
                     child: Text(Controller.displaySignUpMenuButton,
                         style: _signUpActive
                             ? TextStyle(
-                            fontSize: 22,
-                            color: Theme
-                                .of(context)
-                                .accentColor,
-                            fontWeight: FontWeight.bold)
+                                fontSize: 22,
+                                color: Theme.of(context).accentColor,
+                                fontWeight: FontWeight.bold)
                             : TextStyle(
-                            fontSize: 16,
-                            color: Theme
-                                .of(context)
-                                .accentColor,
-                            fontWeight: FontWeight.normal)),
+                                fontSize: 16,
+                                color: Theme.of(context).accentColor,
+                                fontWeight: FontWeight.normal)),
                   )
                 ],
               ),
@@ -167,7 +137,11 @@ class _LogInPageState extends StateMVC<LogInPage> {
         Container(
           child: Padding(
               padding: EdgeInsets.only(left: 30.0, right: 30.0),
-              child: _signInActive ? _showSignIn(context, _emailController, _passwordController) : _showSignUp(_newEmailController, _newPasswordController)),
+              child: _signInActive
+                  ? _showSignIn(
+                      context, _usernameController, _passwordController)
+                  : _showSignUp(_newEmailController, _newUsernameController,
+                      _newPasswordController)),
           width: ScreenUtil.getInstance().setWidth(750),
           height: ScreenUtil.getInstance().setHeight(778),
         ),
@@ -175,16 +149,27 @@ class _LogInPageState extends StateMVC<LogInPage> {
     );
   }
 
-  Widget _showSignIn(BuildContext context, TextEditingController emailController, TextEditingController passwordController) {
-    return new SignInWidget(context: context, emailController: emailController, passwordController: passwordController);
+  Widget _showSignIn(
+      BuildContext context,
+      TextEditingController usernameController,
+      TextEditingController passwordController) {
+    return new SignInWidget(
+        context: context,
+        usernameController: usernameController,
+        passwordController: passwordController);
   }
 
-  Widget _showSignUp(TextEditingController newEmailController, TextEditingController newPasswordController) {
-    return new SignupWidget();
+  Widget _showSignUp(
+      TextEditingController newEmailController,
+      TextEditingController newUsernameController,
+      TextEditingController newPasswordController) {
+    return new SignupWidget(
+        newEmailController: newEmailController,
+        newUsernameController: newUsernameController,
+        newPasswordController: newPasswordController);
   }
 
-  Widget horizontalLine() =>
-      Padding(
+  Widget horizontalLine() => Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: Container(
           width: ScreenUtil.getInstance().setWidth(120),
@@ -207,7 +192,9 @@ class LogInPage extends StatefulWidget {
 class Controller extends ControllerMVC {
   /// Singleton Factory
   factory Controller() {
-    if (_this == null) _this = Controller._();
+    if (_this == null) {
+      _this = Controller._();
+    }
     return _this;
   }
 
@@ -219,48 +206,48 @@ class Controller extends ControllerMVC {
   static Controller get con => _this;
 
   /// The Controller doesn't know any values or methods. It simply handles the communication between the view and the model.
+  ///
+  static String get displayLogoTitle => "iSpend";
 
-  static String get displayLogoTitle => _logoTitle;
+  static String get displayLogoSubTitle => "Where the f is ma' monah'??";
 
-  static String get displayLogoSubTitle => _logoSubTitle;
+  static String get displaySignUpMenuButton => "SIGN UP";
 
-  static String get displaySignUpMenuButton => _signUpMenuButton;
+  static String get displaySignInMenuButton => "SIGN IN";
 
-  static String get displaySignInMenuButton => _signInMenuButton;
+  static String get displayHintTextEmail => "Email";
 
-  static String get displayHintTextEmail => _hintTextEmail;
+  static String get displayHintTextPassword => "Password";
 
-  static String get displayHintTextPassword => _hintTextPassword;
+  static String get displayHintTextUsername => "Username";
 
-  static String get displayHintTextUsername => _hintTextUsername;
+  static String get displayHintTextNewEmail => "Enter your Email";
 
-  static String get displayHintTextNewEmail => _hintTextNewEmail;
+  static String get displayHintTextNewPassword => "Enter a Password";
 
-  static String get displayHintTextNewPassword => _hintTextNewPassword;
+  static String get displayHintTextNewUsername => "Enter your Username";
 
-  static String get displayHintTextNewUsername => _hintTextNewUsername;
+  static String get displaySignUpButtonTest => "SIGN UP";
 
-  static String get displaySignUpButtonTest => _signUpButtonText;
+  static String get displaySignInEmailButton => "Sign in with Email";
 
-  static String get displaySignInEmailButton =>
-      _signInWithEmailButtonText;
-
-  static String get displayErrorEmailLogIn => _emailLogInFailed;
+  static String get displayErrorEmailLogIn =>
+      "Email or Password was incorrect. Please try again";
 
   static void changeToSignUp() => Model._changeToSignUp();
 
   static void changeToSignIn() => Model._changeToSignIn();
 
-  static Future<bool> signInWithEmail(context, email, password) =>
-      Model._signInWithEmail(context, email, password);
+  static Future<bool> signIn(context, username, password) =>
+      Model._signIn(context, username, password);
 
-  static void signUpWithEmailAndPassword(email, password) =>
-      Model._signUpWithEmailAndPassword(email, password);
+  static void signUp(email, username, password) =>
+      Model._signUp(email, username, password);
 
   static Future navigateToProfile(context) => Model._navigateToProfile(context);
 
-  static Future tryToLogInUserViaEmail(context, email, password) async {
-    if (await signInWithEmail(context, email, password) == true) {
+  static Future tryToLogIn(context, username, password) async {
+    if (await signIn(context, username, password) == true) {
       navigateToProfile(context);
     }
   }
@@ -268,8 +255,10 @@ class Controller extends ControllerMVC {
   static Future tryToSignUpWithEmail(email, password) async {
     if (await tryToSignUpWithEmail(email, password) == true) {
       //TODO Display success message or go to Login screen
+      print("tryToSignUpWithEmail true");
     } else {
       //TODO Display error message and stay put.
+      print("tryToSignUpWithEmail false");
     }
   }
 }
@@ -285,14 +274,17 @@ class Model {
     _signInActive = true;
   }
 
-  static Future<bool> _signInWithEmail(context, TextEditingController email,
-      TextEditingController password) async {
+  static Future<bool> _signIn(context, TextEditingController usernameCtrl,
+      TextEditingController passwordCtrl) async {
     try {
       // AuthResult result = await FirebaseAuth.instance
       //     .signInWithEmailAndPassword(
       //     email: email.text.trim().toLowerCase(), password: password.text);
       // print('Signed in: ${result.user.uid}');
-      NetworkManager.sendLogin('serj', 'serj1');
+      // NetworkManager.sendLogin('serj', 'serj1');
+      String username = usernameCtrl.text.trim();
+      String password = passwordCtrl.text;
+      print("received for signIn: [$username][$password]");
       return false;
     } catch (e) {
       print('Error: $e');
@@ -300,13 +292,17 @@ class Model {
     }
   }
 
-  static Future<bool> _signUpWithEmailAndPassword(TextEditingController email,
-      TextEditingController password) async {
+  static Future<bool> _signUp(TextEditingController emailCtrl,
+      TextEditingController usernameCtrl, TextEditingController passwordCtrl) async {
     try {
       // AuthResult result = await FirebaseAuth.instance
       //     .createUserWithEmailAndPassword(
       //     email: email.text.trim().toLowerCase(), password: password.text);
       // print('Signed up: ${result.user.uid}');
+      String email = emailCtrl.text.trim().toLowerCase();
+      String username = usernameCtrl.text.trim();
+      String password = passwordCtrl.text;
+      print("received for signUp: [$email][$username][$password]");
       return true;
     } catch (e) {
       print('Error: $e');

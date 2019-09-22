@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ispend_app/models/user.dart';
 
 class Profile extends StatelessWidget {
-  final User user = User();
+  final User user;
+
+  Profile({this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +27,8 @@ class Profile extends StatelessWidget {
               child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("Name: " + user.name.toString()),
-                  Text("Email: " + user.email.toString()),
-                  Text("Facebook ID: " + user.fbID.toString()),
-                  Text("Picture url: "+ user.url.toString())
+                  Text("Name: " + user.username),
+                  Text("Email: " + user.email),
                 ],
               )
               //child: _displayUserData(user.profileData),

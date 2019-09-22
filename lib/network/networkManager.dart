@@ -11,7 +11,8 @@ class NetworkManager {
 
   static Future<APIResponse> sendLogin(String username, String password) async {
     var url = 'http://www.serjspends.de/users/login';
-    var response = await http.post(url, body: {'username': username, 'password': password});
+    var response = await http
+        .post(url, body: {'username': username, 'password': password});
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
     return APIResponse.fromJson(response.body);
