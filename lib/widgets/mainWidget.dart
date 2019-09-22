@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ispend_app/network/networkManager.dart';
 import 'package:ispend_app/screens/Profile.dart';
 import 'package:ispend_app/widgets/signInWidget.dart';
 import 'package:ispend_app/widgets/signupWidget.dart';
@@ -291,7 +292,8 @@ class Model {
       //     .signInWithEmailAndPassword(
       //     email: email.text.trim().toLowerCase(), password: password.text);
       // print('Signed in: ${result.user.uid}');
-      return true;
+      NetworkManager.sendLogin('serj', 'serj1');
+      return false;
     } catch (e) {
       print('Error: $e');
       return false;

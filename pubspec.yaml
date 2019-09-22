@@ -27,6 +27,7 @@ dependencies:
   intl: ^0.15.7
   mvc_pattern: ^3.4.3
   splashscreen: ^1.2.0
+  http: ^0.12.0+2
 
 dev_dependencies:
   flutter_test:
