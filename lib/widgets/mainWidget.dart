@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ispend_app/CustomIcons.dart';
 import 'package:ispend_app/screens/Profile.dart';
-import 'package:ispend_app/widgets/SocialIcons.dart';
+import 'package:ispend_app/widgets/signInWidget.dart';
+import 'package:ispend_app/widgets/signupWidget.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
 import 'darkTheme.dart';
@@ -15,18 +15,20 @@ TextEditingController _passwordController = TextEditingController();
 TextEditingController _newEmailController = TextEditingController();
 TextEditingController _newPasswordController = TextEditingController();
 
-// String _logoTitle = "iSpend";
-// String _logoSubTitle = "Where the f is ma' monah'??";
-// String _signInMenuButton = "SIGN IN";
-// String _signUpMenuButton = "SIGN UP";
-// String _hintTextEmail = "Email";
-// String _hintTextPassword = "Password";
-// String _hintTextNewEmail = "Enter your Email";
-// String _hintTextNewPassword = "Enter a Password";
-// String _signUpButtonText = "SIGN UP";
-// String _signInWithEmailButtonText = "Sign in with Email";
-// String _emailLogInFailed =
-//     "Email or Password was incorrect. Please try again";
+const String _logoTitle = "iSpend";
+const String _logoSubTitle = "Where the f is ma' monah'??";
+const String _signInMenuButton = "SIGN IN";
+const String _signUpMenuButton = "SIGN UP";
+const String _hintTextEmail = "Email";
+const String _hintTextUsername = "Username";
+const String _hintTextPassword = "Password";
+const String _hintTextNewUsername = "Enter your Username";
+const String _hintTextNewEmail = "Enter your Email";
+const String _hintTextNewPassword = "Enter a Password";
+const String _signUpButtonText = "SIGN UP";
+const String _signInWithEmailButtonText = "Sign in with Email";
+const String _emailLogInFailed =
+    "Email or Password was incorrect. Please try again";
 
 class MyApp extends StatelessWidget {
   MyApp({Key key}) : super(key: key);
@@ -164,7 +166,7 @@ class _LogInPageState extends StateMVC<LogInPage> {
         Container(
           child: Padding(
               padding: EdgeInsets.only(left: 30.0, right: 30.0),
-              child: _signInActive ? _showSignIn(context) : _showSignUp()),
+              child: _signInActive ? _showSignIn(context, _emailController, _passwordController) : _showSignUp(_newEmailController, _newPasswordController)),
           width: ScreenUtil.getInstance().setWidth(750),
           height: ScreenUtil.getInstance().setHeight(778),
         ),
@@ -172,201 +174,12 @@ class _LogInPageState extends StateMVC<LogInPage> {
     );
   }
 
-  Widget _showSignIn(context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        SizedBox(
-          height: ScreenUtil.getInstance().setHeight(30),
-        ),
-        Container(
-          child: Padding(
-            padding: EdgeInsets.only(),
-            child: TextField(
-              style: TextStyle(color: Theme
-                  .of(context)
-                  .accentColor),
-              controller: _emailController,
-              decoration: InputDecoration(
-                hintText: Controller.displayHintTextEmail,
-                hintStyle: CustomTextStyle.formField(context),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme
-                            .of(context)
-                            .accentColor, width: 1.0)),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme
-                            .of(context)
-                            .accentColor, width: 1.0)),
-                prefixIcon: const Icon(
-                  Icons.email,
-                  color: Colors.white,
-                ),
-              ),
-              obscureText: false,
-            ),
-          ),
-        ),
-        SizedBox(
-          height: ScreenUtil.getInstance().setHeight(50),
-        ),
-        Container(
-          child: Padding(
-            padding: EdgeInsets.only(),
-            child: TextField(
-              obscureText: true,
-              style: TextStyle(color: Theme
-                  .of(context)
-                  .accentColor),
-              controller: _passwordController,
-              decoration: InputDecoration(
-                //Add th Hint text here.
-                hintText: Controller.displayHintTextPassword,
-                hintStyle: CustomTextStyle.formField(context),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme
-                            .of(context)
-                            .accentColor, width: 1.0)),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme
-                            .of(context)
-                            .accentColor, width: 1.0)),
-                prefixIcon: const Icon(
-                  Icons.lock,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: ScreenUtil.getInstance().setHeight(80),
-        ),
-        Container(
-          child: Padding(
-            padding: EdgeInsets.only(),
-            child: RaisedButton(
-              child: Row(
-                children: <Widget>[
-                  SocialIcon(iconData: CustomIcons.email),
-                  Expanded(
-                    child: Text(
-                      Controller.displaySignInEmailButton,
-                      textAlign: TextAlign.center,
-                      style: CustomTextStyle.button(context),
-                    ),
-                  )
-                ],
-              ),
-              color: Colors.blueGrey,
-              onPressed: () =>
-                  Controller.tryToLogInUserViaEmail(
-                      context, _emailController, _passwordController),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: ScreenUtil.getInstance().setHeight(30),
-        ),
-        SizedBox(
-          height: ScreenUtil.getInstance().setHeight(30),
-        ),
-      ],
-    );
+  Widget _showSignIn(BuildContext context, TextEditingController emailController, TextEditingController passwordController) {
+    return new SignInWidget(context: context, emailController: emailController, passwordController: passwordController);
   }
 
-  Widget _showSignUp() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        SizedBox(
-          height: ScreenUtil.getInstance().setHeight(30),
-        ),
-        Container(
-          child: Padding(
-            padding: EdgeInsets.only(),
-            child: TextField(
-              obscureText: false,
-              style: CustomTextStyle.formField(context),
-              controller: _newEmailController,
-              decoration: InputDecoration(
-                //Add th Hint text here.
-                hintText: Controller.displayHintTextNewEmail,
-                hintStyle: CustomTextStyle.formField(context),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme
-                            .of(context)
-                            .accentColor, width: 1.0)),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme
-                            .of(context)
-                            .accentColor, width: 1.0)),
-                prefixIcon: const Icon(
-                  Icons.email,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: ScreenUtil.getInstance().setHeight(50),
-        ),
-        Container(
-          child: Padding(
-            padding: EdgeInsets.only(),
-            child: TextField(
-              obscureText: true,
-              style: CustomTextStyle.formField(context),
-              controller: _newPasswordController,
-              decoration: InputDecoration(
-                //Add the Hint text here.
-                hintText: Controller.displayHintTextNewPassword,
-                hintStyle: CustomTextStyle.formField(context),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme
-                            .of(context)
-                            .accentColor, width: 1.0)),
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Theme
-                            .of(context)
-                            .accentColor, width: 1.0)),
-                prefixIcon: const Icon(
-                  Icons.lock,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: ScreenUtil.getInstance().setHeight(80),
-        ),
-        Container(
-          child: Padding(
-            padding: EdgeInsets.only(),
-            child: RaisedButton(
-              child: Text(
-                Controller.displaySignUpMenuButton,
-                style: CustomTextStyle.button(context),
-              ),
-              color: Colors.blueGrey,
-              onPressed: () =>
-                  Controller.signUpWithEmailAndPassword(
-                      _newEmailController, _newPasswordController),
-            ),
-          ),
-        ),
-      ],
-    );
+  Widget _showSignUp(TextEditingController newEmailController, TextEditingController newPasswordController) {
+    return new SignupWidget();
   }
 
   Widget horizontalLine() =>
@@ -406,28 +219,32 @@ class Controller extends ControllerMVC {
 
   /// The Controller doesn't know any values or methods. It simply handles the communication between the view and the model.
 
-  static String get displayLogoTitle => Model._logoTitle;
+  static String get displayLogoTitle => _logoTitle;
 
-  static String get displayLogoSubTitle => Model._logoSubTitle;
+  static String get displayLogoSubTitle => _logoSubTitle;
 
-  static String get displaySignUpMenuButton => Model._signUpMenuButton;
+  static String get displaySignUpMenuButton => _signUpMenuButton;
 
-  static String get displaySignInMenuButton => Model._signInMenuButton;
+  static String get displaySignInMenuButton => _signInMenuButton;
 
-  static String get displayHintTextEmail => Model._hintTextEmail;
+  static String get displayHintTextEmail => _hintTextEmail;
 
-  static String get displayHintTextPassword => Model._hintTextPassword;
+  static String get displayHintTextPassword => _hintTextPassword;
 
-  static String get displayHintTextNewEmail => Model._hintTextNewEmail;
+  static String get displayHintTextUsername => _hintTextUsername;
 
-  static String get displayHintTextNewPassword => Model._hintTextNewPassword;
+  static String get displayHintTextNewEmail => _hintTextNewEmail;
 
-  static String get displaySignUpButtonTest => Model._signUpButtonText;
+  static String get displayHintTextNewPassword => _hintTextNewPassword;
+
+  static String get displayHintTextNewUsername => _hintTextNewUsername;
+
+  static String get displaySignUpButtonTest => _signUpButtonText;
 
   static String get displaySignInEmailButton =>
-      Model._signInWithEmailButtonText;
+      _signInWithEmailButtonText;
 
-  static String get displayErrorEmailLogIn => Model._emailLogInFailed;
+  static String get displayErrorEmailLogIn => _emailLogInFailed;
 
   static void changeToSignUp() => Model._changeToSignUp();
 
@@ -457,19 +274,6 @@ class Controller extends ControllerMVC {
 }
 
 class Model {
-  static String _logoTitle = "iSpend";
-  static String _logoSubTitle = "Where the f is ma' monah'??";
-  static String _signInMenuButton = "SIGN IN";
-  static String _signUpMenuButton = "SIGN UP";
-  static String _hintTextEmail = "Email";
-  static String _hintTextPassword = "Password";
-  static String _hintTextNewEmail = "Enter your Email";
-  static String _hintTextNewPassword = "Enter a Password";
-  static String _signUpButtonText = "SIGN UP";
-  static String _signInWithEmailButtonText = "Sign in with Email";
-  static String _emailLogInFailed =
-      "Email or Password was incorrect. Please try again";
-
   static void _changeToSignUp() {
     _signUpActive = true;
     _signInActive = false;
