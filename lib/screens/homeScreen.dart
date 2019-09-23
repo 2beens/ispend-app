@@ -46,7 +46,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController _textFieldController = TextEditingController();
+  TextEditingController _amountCtrl = TextEditingController();
 
   int _counter = 0;
   // new spending params
@@ -68,12 +68,18 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('TextField in Dialog'),
+          title: Text('Add Spend'),
           content: TextField(
-            controller: _textFieldController,
-            decoration: InputDecoration(hintText: "TextField in Dialog"),
+            controller: _amountCtrl,
+            decoration: InputDecoration(hintText: "Specify amount"),
           ),
           actions: <Widget>[
+            new FlatButton(
+              child: new Text('ADD'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
             new FlatButton(
               child: new Text('CANCEL'),
               onPressed: () {
