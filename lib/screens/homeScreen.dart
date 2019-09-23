@@ -45,12 +45,14 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+List spendKindsIDs = ["sk_travel", "sk_food", "sk_nightlife", "sk_rent"];
+
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController _currencyCtrl = TextEditingController();
   TextEditingController _amountCtrl = TextEditingController();
   TextEditingController _kindIdCtrl = TextEditingController();
 
-  // List _spendKindsIDs = ["sk_travel", "sk_food", "sk_nightlife", "sk_travel"];
+  String choosenSpendKindID = 'sk_travel';
 
   int _counter = 0;
   // new spending params
@@ -85,9 +87,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   controller: _amountCtrl,
                   decoration: InputDecoration(hintText: "Specify amount"),
                 ),
-                TextField(
-                  controller: _kindIdCtrl,
-                  decoration: InputDecoration(hintText: "Specify kind"),
+                // TextField(
+                //   controller: _kindIdCtrl,
+                //   decoration: InputDecoration(hintText: "Specify kind"),
+                // ),
+                DropdownButton<String>(
+                  value: choosenSpendKindID,
+                  icon: Icon(Icons.arrow_downward),
+                  iconSize: 24,
+                  elevation: 16,
+                  style: TextStyle(
+                    color: Colors.deepPurple
+                  ),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      choosenSpendKindID = newValue;
+                    });
+                  },
+                  items: <String>['sk_travel', 'sk_food', 'sk_nightlife', 'sk_rent']
+                    .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    })
+                    .toList(),
                 ),
               ],
             ),
