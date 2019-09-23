@@ -5,20 +5,19 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ispend_app/models/user.dart';
 import 'package:ispend_app/network/apiResponse.dart';
 import 'package:ispend_app/network/networkManager.dart';
-import 'package:ispend_app/screens/Profile.dart';
+import 'package:ispend_app/screens/homeScreen.dart';
+import 'package:ispend_app/widgets/darkTheme.dart';
 import 'package:ispend_app/widgets/signInWidget.dart';
 import 'package:ispend_app/widgets/signupWidget.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-
-import 'darkTheme.dart';
 
 bool _signUpActive = false;
 bool _signInActive = true;
 
 User _loggedUser;
 
-class MyApp extends StatelessWidget {
-  MyApp({Key key}) : super(key: key);
+class LoginScreen extends StatelessWidget {
+  LoginScreen({Key key}) : super(key: key);
 
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,7 +52,7 @@ class _LogInPageState extends StateMVC<LogInPage> {
   TextEditingController _newUsernameController = TextEditingController();
   TextEditingController _newPasswordController = TextEditingController();
 
-  _LogInPageState() : super(Controller());
+  _LogInPageState() : super(LoginScreenController());
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +72,10 @@ class _LogInPageState extends StateMVC<LogInPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(Controller.displayLogoTitle,
+                  Text(LoginScreenController.displayLogoTitle,
                       style: CustomTextStyle.title(context)),
                   Text(
-                    Controller.displayLogoSubTitle,
+                    LoginScreenController.displayLogoSubTitle,
                     style: CustomTextStyle.subTitle(context),
                   ),
                 ],
@@ -97,11 +96,11 @@ class _LogInPageState extends StateMVC<LogInPage> {
                 children: <Widget>[
                   OutlineButton(
                     onPressed: () =>
-                        setState(() => Controller.changeToSignIn()),
+                        setState(() => LoginScreenController.changeToSignIn()),
                     borderSide: new BorderSide(
                       style: BorderStyle.none,
                     ),
-                    child: new Text(Controller.displaySignInMenuButton,
+                    child: new Text(LoginScreenController.displaySignInMenuButton,
                         style: _signInActive
                             ? TextStyle(
                                 fontSize: 22,
@@ -114,11 +113,11 @@ class _LogInPageState extends StateMVC<LogInPage> {
                   ),
                   OutlineButton(
                     onPressed: () =>
-                        setState(() => Controller.changeToSignUp()),
+                        setState(() => LoginScreenController.changeToSignUp()),
                     borderSide: BorderSide(
                       style: BorderStyle.none,
                     ),
-                    child: Text(Controller.displaySignUpMenuButton,
+                    child: Text(LoginScreenController.displaySignUpMenuButton,
                         style: _signUpActive
                             ? TextStyle(
                                 fontSize: 22,
@@ -155,11 +154,11 @@ class _LogInPageState extends StateMVC<LogInPage> {
   }
 
   Widget _showSignIn(
-      BuildContext context,
+      BuildContext mainContext,
       TextEditingController usernameController,
       TextEditingController passwordController) {
     return new SignInWidget(
-        mainContext: context,
+        mainContext: mainContext,
         usernameController: usernameController,
         passwordController: passwordController);
   }
@@ -184,7 +183,7 @@ class _LogInPageState extends StateMVC<LogInPage> {
         ),
       );
 
-  Widget emailErrorText() => Text(Controller.displayErrorEmailLogIn);
+  Widget emailErrorText() => Text(LoginScreenController.displayErrorEmailLogIn);
 }
 
 class LogInPage extends StatefulWidget {
@@ -195,21 +194,21 @@ class LogInPage extends StatefulWidget {
   State<StatefulWidget> createState() => _LogInPageState();
 }
 
-class Controller extends ControllerMVC {
+class LoginScreenController extends ControllerMVC {
   /// Singleton Factory
-  factory Controller() {
+  factory LoginScreenController() {
     if (_this == null) {
-      _this = Controller._();
+      _this = LoginScreenController._();
     }
     return _this;
   }
 
-  static Controller _this;
+  static LoginScreenController _this;
 
-  Controller._();
+  LoginScreenController._();
 
   /// Allow for easy access to 'the Controller' throughout the application.
-  static Controller get con => _this;
+  static LoginScreenController get con => _this;
 
   /// The Controller doesn't know any values or methods. It simply handles the communication between the view and the model.
   ///
@@ -274,8 +273,7 @@ class Controller extends ControllerMVC {
     }
   }
 
-  static Future trySignUp(
-      context,
+  static Future trySignUp(context,
       TextEditingController emailCtrl,
       TextEditingController usernameCtrl,
       TextEditingController passwordCtrl) async {
@@ -291,29 +289,13 @@ class Controller extends ControllerMVC {
           fontSize: 16.0);
       _loggedUser = null;
     } else {
-      await NetworkManager.sendLogin(
-              usernameCtrl.text.trim(), passwordCtrl.text)
-          .then((apiResp) {
-        if (apiResp.isError) {
-          Fluttertoast.showToast(
-            msg: apiResp.message,
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIos: 5,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        _loggedUser = null;
-        } else {
-          _loggedUser = new User(
-              email: emailCtrl.text.trim().toLowerCase(),
-              username: usernameCtrl.text.trim(),
-              password: passwordCtrl.text,
-              cookie: apiResp.data);
-          print("logging in registered user: " + _loggedUser.cookie);
-          navigateToProfile(context, _loggedUser);
-        }
-      });
+      _loggedUser = new User(
+          email: emailCtrl.text.trim().toLowerCase(),
+          username: usernameCtrl.text.trim(),
+          password: passwordCtrl.text,
+          cookie: apiResp.data);
+      print("logged user: " + _loggedUser.toString());
+      navigateToProfile(context, _loggedUser);
     }
   }
 
@@ -349,10 +331,6 @@ class Model {
     try {
       String username = usernameCtrl.text.trim();
       String password = passwordCtrl.text;
-      if (username == "" && password == "") {
-        username = "ab";
-        password = "ab";
-      }
       print("try to log in: [$username][$password]");
       return NetworkManager.sendLogin(username, password);
     } catch (e) {
@@ -378,7 +356,9 @@ class Model {
   }
 
   static Future _navigateToProfile(context, User loggedUser) async {
+    // await Navigator.push(context,
+    //     MaterialPageRoute(builder: (context) => Profile(user: loggedUser)));
     await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => Profile(user: loggedUser)));
+        MaterialPageRoute(builder: (context) => HomeScreen(title: loggedUser.username + "'s Spends", user: loggedUser)));
   }
 }

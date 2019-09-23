@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ispend_app/customIcons.dart';
-import 'package:ispend_app/widgets/mainWidget.dart';
+import 'package:ispend_app/screens/loginScreen.dart';
 import 'package:ispend_app/widgets/socialIcons.dart';
 
 import 'darkTheme.dart';
@@ -31,7 +31,7 @@ class SignInWidget extends StatelessWidget {
                   .accentColor),
               controller: usernameController,
               decoration: InputDecoration(
-                hintText: Controller.displayHintTextEmail,
+                hintText: LoginScreenController.displayHintTextEmail,
                 hintStyle: CustomTextStyle.formField(this.mainContext),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -66,7 +66,7 @@ class SignInWidget extends StatelessWidget {
               controller: passwordController,
               decoration: InputDecoration(
                 //Add th Hint text here.
-                hintText: Controller.displayHintTextPassword,
+                hintText: LoginScreenController.displayHintTextPassword,
                 hintStyle: CustomTextStyle.formField(this.mainContext),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -98,7 +98,7 @@ class SignInWidget extends StatelessWidget {
                   SocialIcon(iconData: CustomIcons.email),
                   Expanded(
                     child: Text(
-                      Controller.displaySignInEmailButton,
+                      LoginScreenController.displaySignInEmailButton,
                       textAlign: TextAlign.center,
                       style: CustomTextStyle.button(this.mainContext),
                     ),
@@ -107,7 +107,7 @@ class SignInWidget extends StatelessWidget {
               ),
               color: Colors.blueGrey,
               onPressed: () =>
-                  Controller.trySignIn(
+                  LoginScreenController.trySignIn(
                       this.mainContext, usernameController, passwordController),
             ),
           ),

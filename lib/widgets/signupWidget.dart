@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ispend_app/widgets/mainWidget.dart';
+import 'package:ispend_app/screens/loginScreen.dart';
 
 import 'darkTheme.dart';
 
@@ -27,7 +27,7 @@ class SignupWidget extends StatelessWidget {
               controller: newEmailController,
               decoration: InputDecoration(
                 //Add th Hint text here.
-                hintText: Controller.displayHintTextNewEmail,
+                hintText: LoginScreenController.displayHintTextNewEmail,
                 hintStyle: CustomTextStyle.formField(context),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -59,7 +59,7 @@ class SignupWidget extends StatelessWidget {
               controller: newUsernameController,
               decoration: InputDecoration(
                 //Add th Hint text here.
-                hintText: Controller.displayHintTextNewUsername,
+                hintText: LoginScreenController.displayHintTextNewUsername,
                 hintStyle: CustomTextStyle.formField(context),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -91,7 +91,7 @@ class SignupWidget extends StatelessWidget {
               controller: newPasswordController,
               decoration: InputDecoration(
                 //Add the Hint text here.
-                hintText: Controller.displayHintTextNewPassword,
+                hintText: LoginScreenController.displayHintTextNewPassword,
                 hintStyle: CustomTextStyle.formField(context),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -119,12 +119,12 @@ class SignupWidget extends StatelessWidget {
             padding: EdgeInsets.only(),
             child: RaisedButton(
               child: Text(
-                Controller.displaySignUpMenuButton,
+                LoginScreenController.displaySignUpMenuButton,
                 style: CustomTextStyle.button(context),
               ),
               color: Colors.blueGrey,
               onPressed: () =>
-                  Controller.trySignUp(
+                  LoginScreenController.trySignUp(
                       this.mainContext, newEmailController, newUsernameController, newPasswordController),
             ),
           ),

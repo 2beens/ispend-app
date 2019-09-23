@@ -31,31 +31,32 @@ class Profile extends StatelessWidget {
           ],
         ),
         body: Container(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleLineTextFieldWidget(
-                    controller: _controller,
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () => print(
-                    'FlatButton.onPressed: ${_controller.text}',
-                  ),
-                  child: const Text(
-                    'Submit',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // child: Center(
+          //   child: Column(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: <Widget>[
+          //       Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: SingleLineTextFieldWidget(
+          //           controller: _controller,
+          //         ),
+          //       ),
+          //       SizedBox(height: 10.0),
+          //       FlatButton(
+          //         onPressed: () => print(
+          //           'FlatButton.onPressed: ${_controller.text}',
+          //         ),
+          //         child: const Text(
+          //           'Submit',
+          //           style: TextStyle(
+          //             fontSize: 20.0,
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          child: new AlignExamples(),
         ),
       ),
     );
@@ -124,73 +125,73 @@ class SingleLineTextFieldWidget extends StatelessWidget {
 }
 
 
-//// LAYOUT EXMAPLE
-// class AlignExamples extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Flexible(
-//           flex: 1,
-//           child: Container(
-//             color: Colors.black26,
-//             child: Align(
-//               alignment: Alignment(0, 0),
-//               child: Text('Centered!'),
-//             ),
-//           ),
-//         ),
-//         Flexible(
-//           flex: 1,
-//           child: Stack(
-//             children: <Widget>[
-//               Positioned.fill(
-//                 child: Container(
-//                   color: Colors.black12,
-//                 ),
-//               ),
-//               Align(
-//                 alignment: Alignment(-1, -1),
-//                 child: Text('Top Left!'),
-//               ),
-//               Align(
-//                 alignment: Alignment(0, 0),
-//                 child: Text('Centered!'),
-//               ),
-//               Align(
-//                 alignment: Alignment(1, 1),
-//                 child: Text('Bottom Right!'),
-//               ),
-//               Align(
-//                 alignment: Alignment.topCenter,
-//                 child: Text('TopCenter!'),
-//               ),
-//               Align(
-//                 alignment: Alignment.bottomCenter,
-//                 child: Text('TopCenter!'),
-//               ),
-//             ],
-//           ),
-//         ),
-//         Flexible(
-//           flex: 1,
-//           child: Container(
-//               color: Colors.black26,
-//               child: Align(
-//                 alignment: Alignment(-.5, -.5),
-//                 child: Text('25% in'),
-//               )),
-//         ),
-//         Flexible(
-//           flex: 1,
-//           child: Container(
-//               color: Colors.black12,
-//               child: Align(
-//                 alignment: Alignment(.5, .5),
-//                 child: Text('75% in'),
-//               )),
-//         ),
-//       ],
-//     );
-//   }
-// }
+// LAYOUT EXMAPLE
+class AlignExamples extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Flexible(
+          flex: 1,
+          child: Container(
+            color: Colors.black26,
+            child: Align(
+              alignment: Alignment(0, 0),
+              child: Text('Centered!'),
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 1,
+          child: Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black12,
+                ),
+              ),
+              Align(
+                alignment: Alignment(-1, -1),
+                child: Text('Top Left!'),
+              ),
+              Align(
+                alignment: Alignment(0, 0),
+                child: Text('Centered!'),
+              ),
+              Align(
+                alignment: Alignment(1, 1),
+                child: Text('Bottom Right!'),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Text('TopCenter!'),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Text('TopCenter!'),
+              ),
+            ],
+          ),
+        ),
+        // Flexible(
+        //   flex: 1,
+        //   child: Container(
+        //       color: Colors.black26,
+        //       child: Align(
+        //         alignment: Alignment(-.5, -.5),
+        //         child: Text('25% in'),
+        //       )),
+        // ),
+        // Flexible(
+        //   flex: 1,
+        //   child: Container(
+        //       color: Colors.black12,
+        //       child: Align(
+        //         alignment: Alignment(.5, .5),
+        //         child: Text('75% in'),
+        //       )),
+        // ),
+      ],
+    );
+  }
+}

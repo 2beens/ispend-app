@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ispend_app/widgets/MainWidget.dart';
+import 'package:ispend_app/screens/loginScreen.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(LoginScreen());
