@@ -46,7 +46,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TextEditingController _currencyCtrl = TextEditingController();
   TextEditingController _amountCtrl = TextEditingController();
+  TextEditingController _kindIdCtrl = TextEditingController();
+
+  // List _spendKindsIDs = ["sk_travel", "sk_food", "sk_nightlife", "sk_travel"];
 
   int _counter = 0;
   // new spending params
@@ -67,26 +71,43 @@ class _HomeScreenState extends State<HomeScreen> {
     return showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text('Add Spend'),
-          content: TextField(
-            controller: _amountCtrl,
-            decoration: InputDecoration(hintText: "Specify amount"),
-          ),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text('ADD'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 130, horizontal: 0),// all(28.0),
+          child: AlertDialog(
+            title: Text('Add Spend'),
+            content: Column(
+              children: <Widget>[
+                TextField(
+                  controller: _currencyCtrl,
+                  decoration: InputDecoration(hintText: "Specify currency"),
+                ),
+                TextField(
+                  controller: _amountCtrl,
+                  decoration: InputDecoration(hintText: "Specify amount"),
+                ),
+                TextField(
+                  controller: _kindIdCtrl,
+                  decoration: InputDecoration(hintText: "Specify kind"),
+                ),
+              ],
             ),
-            new FlatButton(
-              child: new Text('CANCEL'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('ADD'),
+                onPressed: () {
+                  print(_amountCtrl.text.trim());
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text('CANCEL'),
+                onPressed: () {
+                  print(_amountCtrl.text.trim());
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
         );
       });
   }
