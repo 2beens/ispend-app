@@ -268,7 +268,7 @@ class LoginScreenController extends ControllerMVC {
           username: usernameCtrl.text.trim(),
           password: passwordCtrl.text,
           cookie: apiResp.data);
-      print("logged user: " + _loggedUser.toString());
+      print("logged user: " + _loggedUser.username);
       navigateToProfile(context, _loggedUser);
     }
   }
@@ -294,7 +294,7 @@ class LoginScreenController extends ControllerMVC {
           username: usernameCtrl.text.trim(),
           password: passwordCtrl.text,
           cookie: apiResp.data);
-      print("logged user: " + _loggedUser.toString());
+      print("logged user: " + _loggedUser.username);
       navigateToProfile(context, _loggedUser);
     }
   }

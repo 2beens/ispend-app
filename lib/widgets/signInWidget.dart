@@ -31,7 +31,7 @@ class SignInWidget extends StatelessWidget {
                   .accentColor),
               controller: usernameController,
               decoration: InputDecoration(
-                hintText: LoginScreenController.displayHintTextEmail,
+                hintText: LoginScreenController.displayHintTextUsername,
                 hintStyle: CustomTextStyle.formField(this.mainContext),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -44,7 +44,7 @@ class SignInWidget extends StatelessWidget {
                             .of(this.mainContext)
                             .accentColor, width: 1.0)),
                 prefixIcon: const Icon(
-                  Icons.email,
+                  Icons.account_box,
                   color: Colors.white,
                 ),
               ),
