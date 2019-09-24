@@ -48,11 +48,11 @@ class APIManager {
     return APIResponse.fromJson(response.body);
   }
 
-  static Future<APIResponse> getSpends(String username) async {
+  static Future<GetSpendingsAPIResponse> getSpends(String username) async {
     var url = Config.serverURL + '/spending/all/' + username;
     var response = await http.get(url);
     print('Response status [getSpends]: ${response.statusCode}');
     print('Response body [getSpends]: ${response.body}');
-    return APIResponse.fromJson(response.body);
+    return GetSpendingsAPIResponse.fromJson(response.body);
   }
 }

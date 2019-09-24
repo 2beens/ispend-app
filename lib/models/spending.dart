@@ -12,21 +12,22 @@ class Spending {
 
   Spending({this.id, this.currency, this.amount, this.timestamp, this.kind});
 
-  factory Spending.fromJsonMap(Map<String, dynamic> json) =>
-      _fromJsonMap(json);
-  factory Spending.fromJson(String json) => _fromJson(json);
+  factory Spending.fromJsonMap(Map<String, dynamic> jsonMap) =>
+      fromJsonMap(jsonMap);
+  factory Spending.fromJson(String jsonString) => fromJson(jsonString);
 }
 
-Spending _fromJson(String jsonData) {
-  return _fromJsonMap(json.decode(jsonData));
+Spending fromJson(String jsonData) {
+  return fromJsonMap(json.decode(jsonData));
 }
 
-Spending _fromJsonMap(Map<String, dynamic> json) {
+Spending fromJsonMap(Map<String, dynamic> jsonMap) {
+  int amount = jsonMap['amount'] as int;
   return Spending(
-    id: json['id'] as String,
-    currency: json['currency'] as String,
-    amount: json['amount'] as double,
-    kind: json['kind'] as SpendKind,
-    timestamp: json['timestamp'] as String,
+    id: jsonMap['id'] as String,
+    currency: jsonMap['currency'] as String,
+    amount: amount.toDouble(),
+    kind: SpendKind.fromJsonMap(jsonMap['kind']),
+    timestamp: jsonMap['timestamp'] as String,
   );
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ispend_app/models/spendKind.dart';
@@ -26,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _choosenSpendKindID = 'sk_travel';
   int _counter = 0;
 
-  List<Spending> spends;
+  List<Spending> spends = new List();
 
   _HomeScreenState(String username, String cookie) {
     this.username = username;
@@ -38,7 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
         print(" > error getting spends: " + apiResp.message);
         return;
       }
-      print("received spends: " + apiResp.data.toString());
+      
+      for (int i = 0; i < apiResp.data.length; i++) {
+        Spending spend = Spending.fromJsonMap(apiResp.data[i]);
+        spends.add(spend);
+      }
+      print("received " + spends.length.toString() + " spends");
     });
 
     // print("received spends: " + this.spends.length.toString());

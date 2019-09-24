@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ispend_app/models/spending.dart';
+
 // json serialization
 // https://www.woolha.com/tutorials/flutter-dart-convert-deserialize-json-string-to-object
 
@@ -7,7 +9,7 @@ class APIResponse {
   int status;
   bool isError;
   String message;
-  dynamic data;
+  String data;
 
   APIResponse({this.status, this.isError, this.message, this.data});
 
@@ -25,6 +27,36 @@ APIResponse _responseFromJsonMap(Map<String, dynamic> json) {
     status: json['status'] as int,
     isError: json['is_error'] as bool,
     message: json['message'] as String,
-    data: json['data'] as dynamic,
+    data: json['data'] as String,
+  );
+}
+
+// ^^^^^^^^
+// TODO: use inheritance instead of this code redundance
+// vvvvvvvv
+
+class GetSpendingsAPIResponse {
+  int status;
+  bool isError;
+  String message;
+  List<dynamic> data;
+
+  GetSpendingsAPIResponse({this.status, this.isError, this.message, this.data});
+
+  factory GetSpendingsAPIResponse.fromJsonMap(Map<String, dynamic> json) =>
+      _spendingsResponseFromJsonMap(json);
+  factory GetSpendingsAPIResponse.fromJson(String json) => _spendingsResponseFromJson(json);
+}
+
+GetSpendingsAPIResponse _spendingsResponseFromJson(String jsonData) {
+  return _spendingsResponseFromJsonMap(json.decode(jsonData));
+}
+
+GetSpendingsAPIResponse _spendingsResponseFromJsonMap(Map<String, dynamic> json) {
+  return GetSpendingsAPIResponse(
+    status: json['status'] as int,
+    isError: json['is_error'] as bool,
+    message: json['message'] as String,
+    data: json['data'] as List<dynamic>,
   );
 }
