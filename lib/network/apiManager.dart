@@ -3,7 +3,7 @@ import 'package:ispend_app/config.dart';
 import 'package:ispend_app/models/spending.dart';
 import 'package:ispend_app/network/apiResponse.dart';
 
-class NetworkManager {
+class APIManager {
   static Future<String> sendRequest(String url, dynamic body) async {
     var response = await http.post(url, body: body);
     print('Response status: ${response.statusCode}');
@@ -45,6 +45,14 @@ class NetworkManager {
     });
     print('Response status [sendNewSpending]: ${response.statusCode}');
     print('Response body [sendNewSpending]: ${response.body}');
+    return APIResponse.fromJson(response.body);
+  }
+
+  static Future<APIResponse> getSpends(String username) async {
+    var url = Config.serverURL + '/spending/all/' + username;
+    var response = await http.get(url);
+    print('Response status [getSpends]: ${response.statusCode}');
+    print('Response body [getSpends]: ${response.body}');
     return APIResponse.fromJson(response.body);
   }
 }

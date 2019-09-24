@@ -5,10 +5,10 @@ class User {
   String email;
   String password;
   String cookie;
-  List<Spending> spendings;
+  List<Spending> spends;
 
   User({this.email, this.username, this.password, this.cookie}) {
-    this.spendings = new List();
+    this.spends = new List();
   }
 
   Map<String, dynamic> toMap() {

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ispend_app/models/spendKind.dart';
 import 'package:ispend_app/models/spending.dart';
 import 'package:ispend_app/models/user.dart';
-import 'package:ispend_app/network/networkManager.dart';
+import 'package:ispend_app/network/apiManager.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key, this.title, this.user}) : super(key: key);
@@ -22,12 +23,25 @@ class _HomeScreenState extends State<HomeScreen> {
   String cookie;
   TextEditingController _currencyCtrl = TextEditingController();
   TextEditingController _amountCtrl = TextEditingController();
-  String choosenSpendKindID = 'sk_travel';
+  String _choosenSpendKindID = 'sk_travel';
   int _counter = 0;
+
+  List<Spending> spends;
 
   _HomeScreenState(String username, String cookie) {
     this.username = username;
     this.cookie = cookie;
+    this.spends = spends;
+
+    APIManager.getSpends(username).then((apiResp) {
+      if (apiResp.isError) {
+        print(" > error getting spends: " + apiResp.message);
+        return;
+      }
+      print("received spends: " + apiResp.data.toString());
+    });
+
+    // print("received spends: " + this.spends.length.toString());
   }
 
   void _incrementCounter() {
@@ -39,6 +53,13 @@ class _HomeScreenState extends State<HomeScreen> {
       // called again, and so nothing would appear to happen.
       print("incrementing counter: " + _counter.toString());
       _counter++;
+    });
+  }
+
+  void _setSpendKindID(String spendKindID) {
+    setState(() {
+      _choosenSpendKindID = spendKindID;
+      print("new choosen spend kind ID: " + _choosenSpendKindID);
     });
   }
 
@@ -70,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context) {
           return Padding(
             padding: const EdgeInsets.symmetric(
-                vertical: 130, horizontal: 0), // all(28.0),
+                vertical: 70, horizontal: 0), // all(28.0),
             child: AlertDialog(
               title: Text('Add Spend'),
               content: Column(
@@ -83,8 +104,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     controller: _amountCtrl,
                     decoration: InputDecoration(hintText: "Specify amount"),
                   ),
+                  // TODO: this crap probably has to be a stateful widget
+                  //    in order for the selected spend kind ID to change visually too
                   DropdownButton<String>(
-                    value: choosenSpendKindID,
+                    value: _choosenSpendKindID,
                     icon: Icon(Icons.arrow_downward),
                     iconSize: 24,
                     elevation: 16,
@@ -94,10 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.deepPurpleAccent,
                     ),
                     onChanged: (String newValue) {
-                      setState(() {
-                        choosenSpendKindID = newValue;
-                        _incrementCounter();
-                      });
+                      _setSpendKindID(newValue);
                     },
                     items: <String>[
                       'sk_travel',
@@ -123,9 +143,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         _currencyCtrl.text);
                     double amount =
                         double.tryParse(_amountCtrl.text.trim()) ?? '0';
+                    // TODO: choose kind from a list, taken from server, rather than this
+                    SpendKind spendKind =
+                        new SpendKind(id: _choosenSpendKindID, name: "empty");
                     Spending newSpending = new Spending(
-                        _currencyCtrl.text.trim(), amount, choosenSpendKindID);
-                    NetworkManager.sendNewSpending(username, newSpending)
+                        currency: _currencyCtrl.text.trim(), amount: amount);
+                    APIManager.sendNewSpending(username, newSpending)
                         .then((apiResp) {
                       if (apiResp.isError) {
                         _showError("Error: " + apiResp.message);

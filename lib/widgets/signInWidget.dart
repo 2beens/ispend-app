@@ -12,7 +12,8 @@ class SignInWidget extends StatelessWidget {
   final TextEditingController passwordController;
   final BuildContext mainContext;
 
-  SignInWidget({this.mainContext, this.usernameController, this.passwordController});
+  SignInWidget(
+      {this.mainContext, this.usernameController, this.passwordController});
 
   @override
   Widget build(BuildContext context) {
@@ -26,23 +27,19 @@ class SignInWidget extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(),
             child: TextField(
-              style: TextStyle(color: Theme
-                  .of(this.mainContext)
-                  .accentColor),
-              controller: usernameController,
+              style: TextStyle(color: Theme.of(this.mainContext).accentColor),
+              controller: usernameController..text = 'serj',
               decoration: InputDecoration(
                 hintText: LoginScreenController.displayHintTextUsername,
                 hintStyle: CustomTextStyle.formField(this.mainContext),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: Theme
-                            .of(this.mainContext)
-                            .accentColor, width: 1.0)),
+                        color: Theme.of(this.mainContext).accentColor,
+                        width: 1.0)),
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: Theme
-                            .of(this.mainContext)
-                            .accentColor, width: 1.0)),
+                        color: Theme.of(this.mainContext).accentColor,
+                        width: 1.0)),
                 prefixIcon: const Icon(
                   Icons.account_box,
                   color: Colors.white,
@@ -60,24 +57,20 @@ class SignInWidget extends StatelessWidget {
             padding: EdgeInsets.only(),
             child: TextField(
               obscureText: true,
-              style: TextStyle(color: Theme
-                  .of(this.mainContext)
-                  .accentColor),
-              controller: passwordController,
+              style: TextStyle(color: Theme.of(this.mainContext).accentColor),
+              controller: passwordController..text = 's',
               decoration: InputDecoration(
                 //Add th Hint text here.
                 hintText: LoginScreenController.displayHintTextPassword,
                 hintStyle: CustomTextStyle.formField(this.mainContext),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: Theme
-                            .of(this.mainContext)
-                            .accentColor, width: 1.0)),
+                        color: Theme.of(this.mainContext).accentColor,
+                        width: 1.0)),
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: Theme
-                            .of(this.mainContext)
-                            .accentColor, width: 1.0)),
+                        color: Theme.of(this.mainContext).accentColor,
+                        width: 1.0)),
                 prefixIcon: const Icon(
                   Icons.lock,
                   color: Colors.white,
@@ -106,9 +99,8 @@ class SignInWidget extends StatelessWidget {
                 ],
               ),
               color: Colors.blueGrey,
-              onPressed: () =>
-                  LoginScreenController.trySignIn(
-                      this.mainContext, usernameController, passwordController),
+              onPressed: () => LoginScreenController.trySignIn(
+                  this.mainContext, usernameController, passwordController),
             ),
           ),
         ),

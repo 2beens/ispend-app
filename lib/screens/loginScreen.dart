@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ispend_app/models/user.dart';
 import 'package:ispend_app/network/apiResponse.dart';
-import 'package:ispend_app/network/networkManager.dart';
+import 'package:ispend_app/network/apiManager.dart';
 import 'package:ispend_app/screens/homeScreen.dart';
 import 'package:ispend_app/widgets/darkTheme.dart';
 import 'package:ispend_app/widgets/signInWidget.dart';
@@ -332,7 +332,7 @@ class Model {
       String username = usernameCtrl.text.trim();
       String password = passwordCtrl.text;
       print("try to log in: [$username][$password]");
-      return NetworkManager.sendLogin(username, password);
+      return APIManager.sendLogin(username, password);
     } catch (e) {
       print('Error: $e');
       return null;
@@ -348,7 +348,7 @@ class Model {
       String username = usernameCtrl.text.trim();
       String password = passwordCtrl.text;
       print("received for signUp: [$email][$username][$password]");
-      return NetworkManager.sendRegister(email, username, password);
+      return APIManager.sendRegister(email, username, password);
     } catch (e) {
       print('Error: $e');
       return null;
