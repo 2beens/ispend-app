@@ -18,17 +18,19 @@ class HomeScreen extends StatefulWidget {
       _HomeScreenState(user.username, user.cookie);
 }
 
-List spendKindsIDs = ["sk_travel", "sk_food", "sk_nightlife", "sk_rent"];
+// List spendKindsIDs = ["sk_travel", "sk_food", "sk_nightlife", "sk_rent"];
+List spendKindsIDs = [];
 
 class _HomeScreenState extends State<HomeScreen> {
   String username;
   String cookie;
   TextEditingController _currencyCtrl = TextEditingController();
   TextEditingController _amountCtrl = TextEditingController();
-  String _choosenSpendKindID = 'sk_travel';
+  String _choosenSpendKindID = '1';
   int _counter = 0;
 
   List<Spending> spends = new List();
+  List<SpendKind> spendKinds = new List();
 
   _HomeScreenState(String username, String cookie) {
     this.username = username;
@@ -46,6 +48,21 @@ class _HomeScreenState extends State<HomeScreen> {
         spends.add(spend);
       }
       print("received " + spends.length.toString() + " spends");
+    });
+
+    APIManager.getSpendKinds(username).then((apiResp) {
+      if (apiResp.isError) {
+        print(" > error getting spend kinds: " + apiResp.message);
+        return;
+      }
+
+      for (int i = 0; i < apiResp.data.length; i++) {
+        SpendKind spendKind = SpendKind.fromJsonMap(apiResp.data[i]);
+        spendKinds.add(spendKind);
+        spendKindsIDs.add(spendKind.id.toString());
+      }
+
+      print("received " + apiResp.data.length.toString() + " spend kinds");
     });
 
     // print("received spends: " + this.spends.length.toString());

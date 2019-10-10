@@ -25,7 +25,7 @@ APIResponse _responseFromJson(String jsonData) {
 APIResponse _responseFromJsonMap(Map<String, dynamic> json) {
   return APIResponse(
     status: json['status'] as int,
-    isError: json['is_error'] as bool,
+    isError: json['isError'] as bool,
     message: json['message'] as String,
     data: json['data'] as String,
   );
@@ -35,27 +35,27 @@ APIResponse _responseFromJsonMap(Map<String, dynamic> json) {
 // TODO: use inheritance instead of this code redundance
 // vvvvvvvv
 
-class GetSpendingsAPIResponse {
+class GetDynamicAPIResponse {
   int status;
   bool isError;
   String message;
   List<dynamic> data;
 
-  GetSpendingsAPIResponse({this.status, this.isError, this.message, this.data});
+  GetDynamicAPIResponse({this.status, this.isError, this.message, this.data});
 
-  factory GetSpendingsAPIResponse.fromJsonMap(Map<String, dynamic> json) =>
+  factory GetDynamicAPIResponse.fromJsonMap(Map<String, dynamic> json) =>
       _spendingsResponseFromJsonMap(json);
-  factory GetSpendingsAPIResponse.fromJson(String json) => _spendingsResponseFromJson(json);
+  factory GetDynamicAPIResponse.fromJson(String json) => _spendingsResponseFromJson(json);
 }
 
-GetSpendingsAPIResponse _spendingsResponseFromJson(String jsonData) {
+GetDynamicAPIResponse _spendingsResponseFromJson(String jsonData) {
   return _spendingsResponseFromJsonMap(json.decode(jsonData));
 }
 
-GetSpendingsAPIResponse _spendingsResponseFromJsonMap(Map<String, dynamic> json) {
-  return GetSpendingsAPIResponse(
+GetDynamicAPIResponse _spendingsResponseFromJsonMap(Map<String, dynamic> json) {
+  return GetDynamicAPIResponse(
     status: json['status'] as int,
-    isError: json['is_error'] as bool,
+    isError: json['isError'] as bool,
     message: json['message'] as String,
     data: json['data'] as List<dynamic>,
   );

@@ -15,8 +15,9 @@ SpendKind fromJson(String jsonData) {
 }
 
 SpendKind fromJsonMap(Map<String, dynamic> json) {
+  int id = json['id'] as int;
   return SpendKind(
-    id: json['id'] as String,
+    id: id.toString(),
     name: json['name'] as String,
   );
 }

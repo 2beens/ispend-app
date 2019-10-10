@@ -48,11 +48,19 @@ class APIManager {
     return APIResponse.fromJson(response.body);
   }
 
-  static Future<GetSpendingsAPIResponse> getSpends(String username) async {
+  static Future<GetDynamicAPIResponse> getSpends(String username) async {
     var url = Config.serverURL + '/spending/all/' + username;
     var response = await http.get(url);
     print('Response status [getSpends]: ${response.statusCode}');
     print('Response body [getSpends]: ${response.body}');
-    return GetSpendingsAPIResponse.fromJson(response.body);
+    return GetDynamicAPIResponse.fromJson(response.body);
+  }
+
+  static Future<GetDynamicAPIResponse> getSpendKinds(String username) async {
+    var url = Config.serverURL + '/spending/kind/' + username;
+    var response = await http.get(url);
+    print('Response status [getSpendKinds]: ${response.statusCode}');
+    print('Response body [getSpendKinds]: ${response.body}');
+    return GetDynamicAPIResponse.fromJson(response.body);
   }
 }
