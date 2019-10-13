@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ispend_app/models/spendKind.dart';
@@ -18,16 +16,13 @@ class HomeScreen extends StatefulWidget {
       _HomeScreenState(user.username, user.cookie);
 }
 
-// List spendKindsIDs = ["sk_travel", "sk_food", "sk_nightlife", "sk_rent"];
-List<String> spendKindsIDs = [];
-
 class _HomeScreenState extends State<HomeScreen> {
   String username;
   String cookie;
   TextEditingController _currencyCtrl = TextEditingController();
   TextEditingController _amountCtrl = TextEditingController();
   String _choosenSpendKindID = '';
-  int _counter = 0;
+  SpendKind _choosenSpendKind;
 
   List<Spending> spends = new List();
   List<SpendKind> spendKinds = new List();
@@ -61,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
       for (int i = 0; i < apiResp.data.length; i++) {
         SpendKind spendKind = SpendKind.fromJsonMap(apiResp.data[i]);
         spendKinds.add(spendKind);
-        spendKindsIDs.add(spendKind.id.toString());
         print("adding spend kind: " + spendKind.id.toString());
       }
 
@@ -69,27 +63,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
       print("received " + apiResp.data.length.toString() + " spend kinds");
     });
-
-    // print("received spends: " + this.spends.length.toString());
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      print("incrementing counter: " + _counter.toString());
-      _counter++;
-    });
   }
 
   void _setSpendKindID(String spendKindID) {
     setState(() {
       _choosenSpendKindID = spendKindID;
-      print("new choosen spend kind ID: " + _choosenSpendKindID);
+      _choosenSpendKind = _getSpendKind(spendKindID);
+      print("new choosen spend kind ID: " +
+          _choosenSpendKindID +
+          ": " +
+          _choosenSpendKind.name);
     });
+  }
+
+  SpendKind _getSpendKind(String skId) {
+    for (var sk in this.spendKinds) {
+      if (sk.id == skId) {
+        return sk;
+      }
+    }
+    return null;
   }
 
   _showError(String message) {
@@ -148,11 +141,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     onChanged: (String newValue) {
                       _setSpendKindID(newValue);
                     },
-                    items: spendKindsIDs
-                        .map<DropdownMenuItem<String>>((dynamic value) {
+                    items: this
+                        .spendKinds
+                        .map<DropdownMenuItem<String>>((SpendKind sk) {
                       return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
+                        value: sk.id,
+                        child: Text(sk.name),
                       );
                     }).toList(),
                   ),
@@ -168,18 +162,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         _currencyCtrl.text);
                     double amount =
                         double.tryParse(_amountCtrl.text.trim()) ?? '0';
-                    // TODO: choose kind from a list, taken from server, rather than this
-                    SpendKind spendKind =
-                        new SpendKind(id: _choosenSpendKindID, name: "empty");
                     Spending newSpending = new Spending(
-                        currency: _currencyCtrl.text.trim(), amount: amount);
+                        currency: _currencyCtrl.text.trim(),
+                        amount: amount,
+                        timestamp: new DateTime.now().toIso8601String(),
+                        kind: _choosenSpendKind);
                     APIManager.sendNewSpending(username, newSpending)
                         .then((apiResp) {
                       if (apiResp.isError) {
                         _showError("Error: " + apiResp.message);
                       } else {
-                        cookie = apiResp.data;
                         _showMessage("New Spending added!");
+                        setState(() {
+                          this.spends.add(newSpending);
+                        });
                       }
                       Navigator.of(context).pop();
                     });
@@ -272,7 +268,8 @@ class _HomeScreenState extends State<HomeScreen> {
     for (var s in this.spends) {
       spends.add(ListTile(
         leading: Icon(Icons.adjust),
-        title: Text(s.kind.name + " - " + s.amount.toString() + " " + s.currency),
+        title:
+            Text(s.kind.name + " - " + s.amount.toString() + " " + s.currency),
       ));
     }
     return spends;
