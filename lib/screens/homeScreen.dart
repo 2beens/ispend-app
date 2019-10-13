@@ -60,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       _choosenSpendKindID = spendKinds.first.id;
+      _choosenSpendKind = spendKinds.first;
 
       print("received " + apiResp.data.length.toString() + " spend kinds");
     });
@@ -218,30 +219,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.blueGrey,
                     ),
                   ),
-                  Align(
-                    alignment: Alignment(-1, -1),
-                    child: Text('Top Left!'),
-                  ),
-                  Align(
-                    alignment: Alignment(0, 0),
-                    child: Text('Centered!'),
-                  ),
-                  Align(
-                    alignment: Alignment(1, 1),
-                    child: Text('Bottom Right!'),
-                  ),
+                  // Align(
+                  //   alignment: Alignment(-1, -1),
+                  //   child: Text('Top Left!'),
+                  // ),
+                  // Align(
+                  //   alignment: Alignment(0, 0),
+                  //   child: Text('Centered!'),
+                  // ),
+                  // Align(
+                  //   alignment: Alignment(1, 1),
+                  //   child: Text('Bottom Right!'),
+                  // ),
                   Align(
                     alignment: Alignment.topCenter,
-                    // child: Text('TopCenter!'),
-                    // child: Stack(children: _getSpendsWidgets()),
                     child: ListView(
                       children: _getSpendsWidgets(),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Text('BottomCenter!'),
-                  ),
+                  // Align(
+                  //   alignment: Alignment.bottomCenter,
+                  //   child: Text('BottomCenter!'),
+                  // ),
                 ],
               ),
             ),
