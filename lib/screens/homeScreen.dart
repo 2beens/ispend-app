@@ -19,14 +19,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 // List spendKindsIDs = ["sk_travel", "sk_food", "sk_nightlife", "sk_rent"];
-List spendKindsIDs = [];
+List<String> spendKindsIDs = [];
 
 class _HomeScreenState extends State<HomeScreen> {
   String username;
   String cookie;
   TextEditingController _currencyCtrl = TextEditingController();
   TextEditingController _amountCtrl = TextEditingController();
-  String _choosenSpendKindID = '1';
+  String _choosenSpendKindID = '';
   int _counter = 0;
 
   List<Spending> spends = new List();
@@ -42,12 +42,14 @@ class _HomeScreenState extends State<HomeScreen> {
         print(" > error getting spends: " + apiResp.message);
         return;
       }
-      
-      for (int i = 0; i < apiResp.data.length; i++) {
-        Spending spend = Spending.fromJsonMap(apiResp.data[i]);
-        spends.add(spend);
-      }
-      print("received " + spends.length.toString() + " spends");
+
+      setState(() {
+        for (int i = 0; i < apiResp.data.length; i++) {
+          Spending spend = Spending.fromJsonMap(apiResp.data[i]);
+          spends.add(spend);
+        }
+        print("received " + spends.length.toString() + " spends");
+      });
     });
 
     APIManager.getSpendKinds(username).then((apiResp) {
@@ -60,7 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
         SpendKind spendKind = SpendKind.fromJsonMap(apiResp.data[i]);
         spendKinds.add(spendKind);
         spendKindsIDs.add(spendKind.id.toString());
+        print("adding spend kind: " + spendKind.id.toString());
       }
+
+      _choosenSpendKindID = spendKinds.first.id;
 
       print("received " + apiResp.data.length.toString() + " spend kinds");
     });
@@ -143,12 +148,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     onChanged: (String newValue) {
                       _setSpendKindID(newValue);
                     },
-                    items: <String>[
-                      'sk_travel',
-                      'sk_food',
-                      'sk_nightlife',
-                      'sk_rent'
-                    ].map<DropdownMenuItem<String>>((String value) {
+                    items: spendKindsIDs
+                        .map<DropdownMenuItem<String>>((dynamic value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
@@ -235,11 +236,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Align(
                     alignment: Alignment.topCenter,
-                    child: Text('TopCenter!'),
+                    // child: Text('TopCenter!'),
+                    // child: Stack(children: _getSpendsWidgets()),
+                    child: ListView(
+                      children: _getSpendsWidgets(),
+                    ),
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: Text('TopCenter!'),
+                    child: Text('BottomCenter!'),
                   ),
                 ],
               ),
@@ -260,5 +265,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  List<Widget> _getSpendsWidgets() {
+    List<Widget> spends = new List<Widget>();
+    for (var s in this.spends) {
+      spends.add(ListTile(
+        leading: Icon(Icons.adjust),
+        title: Text(s.kind.name + " - " + s.amount.toString() + " " + s.currency),
+      ));
+    }
+    return spends;
   }
 }

@@ -58,7 +58,7 @@ class SignInWidget extends StatelessWidget {
             child: TextField(
               obscureText: true,
               style: TextStyle(color: Theme.of(this.mainContext).accentColor),
-              controller: passwordController..text = 's',
+              controller: passwordController..text = 'serj1',
               decoration: InputDecoration(
                 //Add th Hint text here.
                 hintText: LoginScreenController.displayHintTextPassword,
